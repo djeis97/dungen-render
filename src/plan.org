@@ -1,0 +1,61 @@
+* Create a new lisp project
+** Depends on:
+- golden-utils
+- defpackage-plus
+- umbra
+- bloom
+- dungen
+** Create package file
+- Create local nicknames for bloom, bloom.shader, and game-math
+- inherit shadow.vari
+** Create code files
+- world
+- shaders
+- definitions
+
+
+* Create required definitions
+In definitions.lisp:
+- define-options
+- define-resource-paths
+
+* Create data directory
+Copy floor.glb and wall.glb
+Explain how they were created (open blender)
+
+* Write shader program definition
+** vertex
+For lighting we need normal vectors in world space, and a vector from the vertex to the camera.
+
+We need a normal matrix, which will be multiplied with the mesh normals to convert normal vectors
+from model to world space.
+
+We also need a function, which when given a cell type, gets the map coordinates of whatever instance
+we're rendering.
+
+Proceed to write get-cell-coords
+
+We need an otherwise clause to please the GLSL transpiler so that there is no chance of a void
+return value.
+
+Back to world/v
+
+We can position the offset of the cell we are rendering, by subtracting the size of the world by
+the coordinates multiplied by 2.
+
+Finally, we can compute the position of the cell, by multiplying the model matrix by the offset plus
+the vertex position.
+
+We pass the model position and vertex uv's to the fragment stage to be interpolated.
+
+We also need to pass the world normals and the vector to the camera if we want to do lighting later.
+
+** fragment
+
+Let's create functions for generating the floor and wall textures. We'll just use a gray color for
+now, but we can do procedural texture generation in these later.
+
+Also let's add a function to calculate the lighting of each fragment. We'll use a neutral gray color
+for now.
+
+The texture and lighting colors are mixed together to produce the final fragment.
