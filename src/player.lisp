@@ -1,21 +1,34 @@
 (in-package :dungen-render)
 
-(b:define-component player-movement (:after (camera))
-  (transform nil)
-  (stage nil)
-  (coords (m:vec3 1 2 0)))
+(b:define-component player-movement (:after (transform))
+  (stage nil))
 
 (defmethod b:on-component-create ((self player-movement))
   (with-accessors ((game-state b:game-state)) self
     (setf (stage self) (b:cache-lookup game-state :world :stage1))))
 
 (defmethod b:on-component-attach ((self player-movement))
-  (with-accessors ((entity b:entity)) self
-    (with-slots (%transform) self
-      (b::switch-camera-target entity)
-      (setf %transform (b:get-entity-component-by-type (b:entity self) 'b:transform)))))
+  (with-accessors ((game-state b:game-state) (entity b:entity)) self
+    (b:switch-camera-target entity)
+    (b:make-action entity
+                   :type 'b:action/translate
+                   :repeat-p t
+                   :duration 0.8
+                   :shape 'm:sine-in-out
+                   :axis :z
+                   :offset 0.2)))
 
-(defmethod b:on-component-update ((self player-movement)))
+(defmethod b:on-component-update ((self player-movement))
+  (with-accessors ((game-state b:game-state)) self
+    (cond
+      ((b:input-enter-p game-state '(:key :w))
+       nil)
+      ((b:input-enter-p game-state '(:key :a))
+       nil)
+      ((b:input-enter-p game-state '(:key :s))
+       nil)
+      ((b:input-enter-p game-state '(:key :d))
+       nil))))
 
 ;;; Definitions
 
