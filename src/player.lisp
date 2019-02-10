@@ -17,18 +17,41 @@
                    :shape 'm:sine-in-out
                    :axis :z
                    :offset 0.2)))
+(defun player-close-to-wall-p (stage position direction)
+  (game-math:with-vec3 ((pos position)
+                        (dir direction))
+    (let* ((wall.x (round (+ pos.x dir.x)))
+           (wall.y (round (+ pos.y dir.y)))
+           (tile (dungen:get-cell stage wall.x wall.y)))
+      (if (dungen:feature-present-p tile :wall)
+          (if (/= dir.x 0)
+              (< (abs (- pos.x wall.x)) 0.75)
+              (< (abs (- pos.y wall.y)) 0.75))))))
 
 (defmethod b:on-component-update ((self player-movement))
-  (with-accessors ((game-state b:game-state)) self
-    (cond
-      ((b:input-enter-p game-state '(:key :w))
-       nil)
-      ((b:input-enter-p game-state '(:key :a))
-       nil)
-      ((b:input-enter-p game-state '(:key :s))
-       nil)
-      ((b:input-enter-p game-state '(:key :d))
-       nil))))
+  (with-accessors ((game-state b:game-state)
+                   (stage stage)
+                   (entity b:entity))
+      self
+    (let* ((transform (b:get-entity-component entity 'b:transform))
+           (position (b::current (b::translation transform))))
+      (game-math:with-vec2 ((tile (m:vec2 (m:round position))))
+        (when (b:input-enabled-p game-state '(:key :w))
+          (let ((dir (m:vec3 1 0 0)))
+            (when (not (player-close-to-wall-p stage position dir))
+              (b:translate-transform transform dir))))
+        (when (b:input-enabled-p game-state '(:key :a))
+          (let ((dir (m:vec3 0 1 0)))
+            (when (not (player-close-to-wall-p stage position dir))
+              (b:translate-transform transform dir))))
+        (when (b:input-enabled-p game-state '(:key :s))
+          (let ((dir (m:vec3 -1 0 0)))
+            (when (not (player-close-to-wall-p stage position dir))
+              (b:translate-transform transform dir))))
+        (when (b:input-enabled-p game-state '(:key :d))
+          (let ((dir (m:vec3 0 -1 0)))
+            (when (not (player-close-to-wall-p stage position dir))
+              (b:translate-transform transform dir))))))))
 
 ;;; Definitions
 
@@ -46,9 +69,9 @@
 
 (b:define-prefab "player"
   (b:transform () :translate (m:vec3 2 1 1))
+  (player-movement ())
   ("body"
-   (b:transform () :scale 0.75)
+   (b:transform () :scale (m:vec3 0.5 0.5 0.75))
    (b:mesh () :file "sphere.glb")
    (b:render () :material 'sphere
-                :mode :mesh)
-   (player-movement ())))
+                :mode :mesh)))
