@@ -13,10 +13,10 @@
     (b:make-action entity
                    :type 'b:action/translate
                    :repeat-p t
-                   :duration 0.8
+                   :duration 0.6
                    :shape 'm:sine-in-out
                    :axis :z
-                   :offset 0.2)))
+                   :offset 0.1)))
 (defun player-close-to-wall-p (stage position direction)
   (game-math:with-vec3 ((pos position)
                         (dir direction))
@@ -37,19 +37,19 @@
            (position (b::current (b::translation transform))))
       (game-math:with-vec2 ((tile (m:vec2 (m:round position))))
         (when (b:input-enabled-p game-state '(:key :w))
-          (let ((dir (m:vec3 1 0 0)))
-            (when (not (player-close-to-wall-p stage position dir))
-              (b:translate-transform transform dir))))
-        (when (b:input-enabled-p game-state '(:key :a))
           (let ((dir (m:vec3 0 1 0)))
             (when (not (player-close-to-wall-p stage position dir))
               (b:translate-transform transform dir))))
-        (when (b:input-enabled-p game-state '(:key :s))
+        (when (b:input-enabled-p game-state '(:key :a))
           (let ((dir (m:vec3 -1 0 0)))
             (when (not (player-close-to-wall-p stage position dir))
               (b:translate-transform transform dir))))
-        (when (b:input-enabled-p game-state '(:key :d))
+        (when (b:input-enabled-p game-state '(:key :s))
           (let ((dir (m:vec3 0 -1 0)))
+            (when (not (player-close-to-wall-p stage position dir))
+              (b:translate-transform transform dir))))
+        (when (b:input-enabled-p game-state '(:key :d))
+          (let ((dir (m:vec3 1 0 0)))
             (when (not (player-close-to-wall-p stage position dir))
               (b:translate-transform transform dir))))))))
 
@@ -68,10 +68,9 @@
                    :opacity 1.0)))
 
 (b:define-prefab "player"
-  (b:transform () :translate (m:vec3 2 1 1))
+  (b:transform () :translate (m:vec3 2 1 0.5)
+                  :scale 0.5)
   (player-movement ())
-  ("body"
-   (b:transform () :scale (m:vec3 0.5 0.5 0.75))
-   (b:mesh () :file "sphere.glb")
-   (b:render () :material 'sphere
-                :mode :mesh)))
+  (b:mesh () :file "sphere.glb")
+  (b:render () :material 'sphere
+               :mode :mesh))

@@ -33,7 +33,7 @@
                                        (normal :vec3))
   (let ((normal-mat (transpose (inverse (mat3 (* view model))))))
     (values (normalize (* normal-mat normal))
-            (normalize (.xyz (aref (inverse view) 3))))))
+            (normalize (.xyz (aref (inverse view) 2))))))
 
 (define-function world/v ((mesh-attrs mesh-attrs)
                           &uniform

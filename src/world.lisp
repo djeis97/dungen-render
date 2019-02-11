@@ -85,14 +85,14 @@
 
 (b:define-material world ()
   (:shader bs:world
-   :uniforms (list :light.position (m:vec3 0 0.25 -1)
+   :uniforms (list :light.position (m:vec3 0.25 -0.125 -1)
                    :light.ambient (m:vec4 0.01)
                    :light.diffuse (m:vec4 0.5)
                    :light.specular (m:vec4 0.5)
                    :material.ambient (m:vec4 0.01)
                    :material.diffuse (m:vec4 1)
                    :material.specular (m:vec4 1)
-                   :material.shininess 20
+                   :material.shininess 30
                    :opacity 1.0
                    :generate-texture-p nil)))
 
