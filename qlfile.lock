@@ -19,24 +19,24 @@
 ("dungen" .
  (:class qlot.source.github:source-github
   :initargs (:project-name "dungen" :repos "mfiano/dungen" :ref nil :branch nil :tag nil)
-  :version "github-860d61c300b61f6454d6fdadbe9b5cad6cb54cde"
+  :version "github-a50c853494343ecf49dac0a6f89b43307abd102d"
   :repos "mfiano/dungen"
-  :url "https://github.com/mfiano/dungen/archive/860d61c300b61f6454d6fdadbe9b5cad6cb54cde.tar.gz"
-  :ref "860d61c300b61f6454d6fdadbe9b5cad6cb54cde"))
+  :url "https://github.com/mfiano/dungen/archive/a50c853494343ecf49dac0a6f89b43307abd102d.tar.gz"
+  :ref "a50c853494343ecf49dac0a6f89b43307abd102d"))
 ("game-math" .
  (:class qlot.source.github:source-github
   :initargs (:project-name "game-math" :repos "mfiano/game-math" :ref nil :branch nil :tag nil)
-  :version "github-cdb00b0a9c1d60f47b1f75202fdd7bdbf8c2551d"
+  :version "github-ee35eb2e59aa872ef19f97c9fa9dc8b78c70db9f"
   :repos "mfiano/game-math"
-  :url "https://github.com/mfiano/game-math/archive/cdb00b0a9c1d60f47b1f75202fdd7bdbf8c2551d.tar.gz"
-  :ref "cdb00b0a9c1d60f47b1f75202fdd7bdbf8c2551d"))
+  :url "https://github.com/mfiano/game-math/archive/ee35eb2e59aa872ef19f97c9fa9dc8b78c70db9f.tar.gz"
+  :ref "ee35eb2e59aa872ef19f97c9fa9dc8b78c70db9f"))
 ("bloom" .
  (:class qlot.source.github:source-github
   :initargs (:project-name "bloom" :repos "mfiano/bloom" :ref nil :branch nil :tag nil)
-  :version "github-1da638a274438817589c24775f0da8ff171f0065"
+  :version "github-9ac7e0a0b8a2fe5b06a2fff9223b0880f46238b0"
   :repos "mfiano/bloom"
-  :url "https://github.com/mfiano/bloom/archive/1da638a274438817589c24775f0da8ff171f0065.tar.gz"
-  :ref "1da638a274438817589c24775f0da8ff171f0065"))
+  :url "https://github.com/mfiano/bloom/archive/9ac7e0a0b8a2fe5b06a2fff9223b0880f46238b0.tar.gz"
+  :ref "9ac7e0a0b8a2fe5b06a2fff9223b0880f46238b0"))
 ("doubly-linked-list" .
  (:class qlot.source.github:source-github
   :initargs (:project-name "doubly-linked-list" :repos "mfiano/doubly-linked-list" :ref nil :branch nil :tag nil)

@@ -1,11 +1,12 @@
 (in-package :dungen-render)
 
-(b:define-options ()
-  :application-name 'dungen-render
+(b:define-project dungen-render
   :title "Dungeon Renderer"
-  :debug nil
+  :debug t
+  :vsync :on
   :window-width 1280
   :window-height 760
+  :physics-delta 1/20
   :log-file-enable nil
   :default-scene 'dungeon)
 
@@ -15,14 +16,3 @@
    :mesh "data"
    :misc "data"))
 
-(b:define-prefab "dungeon"
-  ("camera"
-   (b:camera () :mode :isometric
-                :clip-near -1024
-                :clip-far 1024
-                :zoom 1))
-  (("world" (:link "/world"))
-   (("player" (:link "/player")))))
-
-(b:define-scenes
-  (dungeon "dungeon"))

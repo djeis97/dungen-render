@@ -18,12 +18,12 @@
    (%doors/h :accessor doors/h
              :initform nil)))
 
-(defun get-cell-count (game-state cell-type)
-  (let ((cell-counts (au:href (b:storage game-state) 'world-cell-counts)))
+(defun get-cell-count (core cell-type)
+  (let ((cell-counts (au:href (b:storage core) 'world-cell-counts)))
     (getf cell-counts cell-type)))
 
-(defun get-cell-index (game-state cell-type)
-  (declare (ignore game-state))
+(defun get-cell-index (core cell-type)
+  (declare (ignore core))
   (ecase cell-type
     (:floor 0)
     (:wall 1)
@@ -31,7 +31,7 @@
     (:door/h 3)))
 
 (defun analyze-map-data (world)
-  (with-accessors ((game-state b:game-state) (data data)) world
+  (with-accessors ((core b:core) (data data)) world
     (with-accessors ((grid dungen:grid) (options dungen:options)) data
       (let ((width (dungen:width options))
             (height (dungen:height options))
@@ -49,7 +49,7 @@
                  (push vec (doors/v cells)))
                 ((dungen:feature-present-p cell :door-horizontal)
                  (push vec (doors/h cells)))))))
-        (setf (au:href (b:storage game-state) 'world-cell-counts)
+        (setf (au:href (b:storage core) 'world-cell-counts)
               (list :floor (length (floors cells))
                     :wall (length (walls cells))
                     :door/v (length (doors/v cells))
@@ -66,19 +66,19 @@
       (shadow:write-buffer-path buffer :doors/h (doors/h cells)))))
 
 (defun make-world-data (world)
-  (with-accessors ((game-state b:game-state)) world
+  (with-accessors ((core b:core)) world
     (with-slots (%name %shaders %options %data) world
       (setf %data (apply #'dungen:make-stage %options))
-      (au:mvlet ((blocks binding (b:make-shader-blocks game-state %shaders :world)))
+      (au:mvlet ((blocks binding (b:make-shader-blocks core %shaders :world)))
         (b:make-shader-buffer %name (first blocks) binding world)
         %data))))
 
 ;;; Component event hooks
 
 (defmethod b:on-component-create ((component world))
-  (with-accessors ((game-state b:game-state)) component
+  (with-accessors ((core b:core)) component
     (with-slots (%name %geometry %data) component
-      (setf %data (b:cache-lookup game-state :world %name
+      (setf %data (b:cache-lookup core :world %name
                     (make-world-data component))))))
 
 ;;; Definitions

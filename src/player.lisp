@@ -1,57 +1,47 @@
 (in-package :dungen-render)
 
 (b:define-component player-movement (:after (transform))
-  (stage nil))
+  (stage nil)
+  (transform nil))
 
 (defmethod b:on-component-create ((self player-movement))
-  (with-accessors ((game-state b:game-state)) self
-    (setf (stage self) (b:cache-lookup game-state :world :stage1))))
+  (with-accessors ((core b:core)) self
+    (setf (stage self) (b:cache-lookup core :world :stage1))))
 
 (defmethod b:on-component-attach ((self player-movement))
-  (with-accessors ((game-state b:game-state) (entity b:entity)) self
+  (with-accessors ((core b:core) (entity b:entity)) self
+    (setf (transform self) (b:get-entity-component entity 'b:transform))
     (b:switch-camera-target entity)
     (b:make-action entity
                    :type 'b:action/translate
                    :repeat-p t
-                   :duration 0.6
+                   :duration 0.8
                    :shape 'm:sine-in-out
                    :axis :z
-                   :offset 0.1)))
-(defun player-close-to-wall-p (stage position direction)
-  (game-math:with-vec3 ((pos position)
-                        (dir direction))
-    (let* ((wall.x (round (+ pos.x dir.x)))
-           (wall.y (round (+ pos.y dir.y)))
-           (tile (dungen:get-cell stage wall.x wall.y)))
-      (if (dungen:feature-present-p tile :wall)
-          (if (/= dir.x 0)
-              (< (abs (- pos.x wall.x)) 0.75)
-              (< (abs (- pos.y wall.y)) 0.75))))))
+                   :offset 0.2)))
 
 (defmethod b:on-component-update ((self player-movement))
-  (with-accessors ((game-state b:game-state)
-                   (stage stage)
-                   (entity b:entity))
-      self
-    (let* ((transform (b:get-entity-component entity 'b:transform))
-           (position (b::current (b::translation transform))))
-      (game-math:with-vec2 ((tile (m:vec2 (m:round position))))
-        (when (b:input-enabled-p game-state '(:key :w))
-          (let ((dir (m:vec3 0 1 0)))
-            (when (not (player-close-to-wall-p stage position dir))
-              (b:translate-transform transform dir))))
-        (when (b:input-enabled-p game-state '(:key :a))
-          (let ((dir (m:vec3 -1 0 0)))
-            (when (not (player-close-to-wall-p stage position dir))
-              (b:translate-transform transform dir))))
-        (when (b:input-enabled-p game-state '(:key :s))
-          (let ((dir (m:vec3 0 -1 0)))
-            (when (not (player-close-to-wall-p stage position dir))
-              (b:translate-transform transform dir))))
-        (when (b:input-enabled-p game-state '(:key :d))
-          (let ((dir (m:vec3 1 0 0)))
-            (when (not (player-close-to-wall-p stage position dir))
-              (b:translate-transform transform dir))))))))
+  (with-accessors ((core b:core) (entity b:entity)) self
+    (with-slots (%stage %transform) self
+      (au:when-let* ((direction
+                      (cond
+                        ((b:input-enter-p core '(:key :w))
+                         (m:vec2 0 1))
+                        ((b:input-enter-p core '(:key :a))
+                         (m:vec2 -1 0))
+                        ((b:input-enter-p core '(:key :s))
+                         (m:vec2 0 -1))
+                        ((b:input-enter-p core '(:key :d))
+                         (m:vec2 1 0))))
+                     (coords (m:vec2 (b:get-translation %transform))))
+        (m:with-vec2 ((v (m:+ coords direction)))
+          (when (and (not (bloom:find-action entity 'b:action/move-tile))
+                     (dungen:carved-p (dungen:get-cell %stage v.x v.y)))
+            (b:make-action entity
+                           :type 'b:action/move-tile
+                           :duration 1
+                           :blocking-p t
+                           :direction direction)))))))
 
 ;;; Definitions
 
@@ -68,7 +58,7 @@
                    :opacity 1.0)))
 
 (b:define-prefab "player"
-  (b:transform () :translate (m:vec3 2 1 0.5)
+  (b:transform () :translate (m:vec3 1 1 0.5)
                   :scale 0.5)
   (player-movement ())
   (b:mesh () :file "sphere.glb")

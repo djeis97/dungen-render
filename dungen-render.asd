@@ -19,7 +19,8 @@
   ((:module "src"
     :components
     ((:file "package")
+     (:file "main")
      (:file "shaders")
      (:file "world")
      (:file "player")
-     (:file "main")))))
+     (:file "scene")))))
