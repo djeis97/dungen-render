@@ -39,7 +39,7 @@
                      (dungen:carved-p (dungen:get-cell %stage v.x v.y)))
             (b:make-action entity
                            :type 'b:action/move-tile
-                           :duration 1
+                           :duration 0.5
                            :blocking-p t
                            :direction direction)))))))
 
