@@ -26,17 +26,17 @@
 ("game-math" .
  (:class qlot.source.github:source-github
   :initargs (:project-name "game-math" :repos "mfiano/game-math" :ref nil :branch nil :tag nil)
-  :version "github-ee35eb2e59aa872ef19f97c9fa9dc8b78c70db9f"
+  :version "github-24c2f4b11946550efb5d76cbca505be05565347e"
   :repos "mfiano/game-math"
-  :url "https://github.com/mfiano/game-math/archive/ee35eb2e59aa872ef19f97c9fa9dc8b78c70db9f.tar.gz"
-  :ref "ee35eb2e59aa872ef19f97c9fa9dc8b78c70db9f"))
+  :url "https://github.com/mfiano/game-math/archive/24c2f4b11946550efb5d76cbca505be05565347e.tar.gz"
+  :ref "24c2f4b11946550efb5d76cbca505be05565347e"))
 ("bloom" .
  (:class qlot.source.github:source-github
   :initargs (:project-name "bloom" :repos "mfiano/bloom" :ref nil :branch nil :tag nil)
-  :version "github-9ac7e0a0b8a2fe5b06a2fff9223b0880f46238b0"
+  :version "github-0194fc7db4cc2edc881c8416ca268b0f935c8ed4"
   :repos "mfiano/bloom"
-  :url "https://github.com/mfiano/bloom/archive/9ac7e0a0b8a2fe5b06a2fff9223b0880f46238b0.tar.gz"
-  :ref "9ac7e0a0b8a2fe5b06a2fff9223b0880f46238b0"))
+  :url "https://github.com/mfiano/bloom/archive/0194fc7db4cc2edc881c8416ca268b0f935c8ed4.tar.gz"
+  :ref "0194fc7db4cc2edc881c8416ca268b0f935c8ed4"))
 ("doubly-linked-list" .
  (:class qlot.source.github:source-github
   :initargs (:project-name "doubly-linked-list" :repos "mfiano/doubly-linked-list" :ref nil :branch nil :tag nil)
